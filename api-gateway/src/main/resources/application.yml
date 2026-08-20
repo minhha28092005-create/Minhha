@@ -18,6 +18,7 @@ spring:
               filters:
                 - RewritePath=/api/auth/(?<segment>.*), /auth/${segment}
 
+
             # =========================
             # COURSE SERVICE - LIST
             # =========================
@@ -27,7 +28,7 @@ spring:
                 - Path=/api/courses
               filters:
                 - RewritePath=/api/courses, /courses
-                - RequireJwt
+
 
             # =========================
             # COURSE SERVICE - DETAIL
@@ -38,7 +39,7 @@ spring:
                 - Path=/api/courses/**
               filters:
                 - RewritePath=/api/courses/(?<segment>.*), /courses/${segment}
-                - RequireJwt
+
 
             # =========================
             # REGISTRATION SERVICE - LIST
@@ -49,7 +50,7 @@ spring:
                 - Path=/api/registrations
               filters:
                 - RewritePath=/api/registrations, /registrations
-                - RequireJwt
+
 
             # =========================
             # REGISTRATION SERVICE - DETAIL
@@ -60,10 +61,10 @@ spring:
                 - Path=/api/registrations/**
               filters:
                 - RewritePath=/api/registrations/(?<segment>.*), /registrations/${segment}
-                - RequireJwt
+
 
             # =========================
-            # PUBLIC COURSE
+            # PUBLIC COURSE API
             # =========================
             - id: course-service-public
               uri: http://localhost:8082
@@ -72,37 +73,32 @@ spring:
               filters:
                 - RewritePath=/api/public/courses, /courses
 
-      # =========================
-      # CORS
-      # =========================
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost:5173"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders:
-              - "*"
 
-# =========================
-# JWT CONFIG
-# =========================
+          # =========================
+          # CORS
+          # =========================
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - "*"
+
+
 jwt:
   secret: CRS-Microservices-Secret-Key-Nam-3-Hoc-Ky-2026-Doi-Trong-Thuc-Te
 
-# =========================
-# PARTNER API KEY
-# =========================
+
 partner:
   api-key: crs-partner-key-2026
 
-# =========================
-# SERVER
-# =========================
+
 server:
   port: 8080
