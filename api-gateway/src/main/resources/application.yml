@@ -20,6 +20,28 @@ spring:
 
 
             # =========================
+            # API KEY MANAGEMENT - LIST
+            # =========================
+            - id: auth-service-apikeys-list
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/api-keys
+              filters:
+                - RewritePath=/api/api-keys, /api-keys
+
+
+            # =========================
+            # API KEY MANAGEMENT - DETAIL
+            # =========================
+            - id: auth-service-apikeys-detail
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/api-keys/**
+              filters:
+                - RewritePath=/api/api-keys/(?<segment>.*), /api-keys/${segment}
+
+
+            # =========================
             # COURSE SERVICE - LIST
             # =========================
             - id: course-service-list
@@ -94,10 +116,6 @@ spring:
 
 jwt:
   secret: CRS-Microservices-Secret-Key-Nam-3-Hoc-Ky-2026-Doi-Trong-Thuc-Te
-
-
-partner:
-  api-key: crs-partner-key-2026
 
 
 server:
