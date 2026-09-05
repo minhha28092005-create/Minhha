@@ -1,4 +1,5 @@
 import axiosClient from './axiosClient';
+
 import type {
     Course,
     PagedResponse,
@@ -13,12 +14,18 @@ export const getCourses = (
     return axiosClient.get<PagedResponse<Course>>(
         '/api/courses',
         {
-            params: { keyword, page, size },
+            params: {
+                keyword,
+                page,
+                size,
+            },
         }
     );
 };
 
-const toPayload = (values: CourseFormValues) => ({
+const toPayload = (
+    values: CourseFormValues
+) => ({
     tenMonHoc: values.tenMonHoc.trim(),
     soTinChi: Number(values.soTinChi),
     soChoToiDa: Number(values.soChoToiDa),
@@ -43,6 +50,18 @@ export const updateCourse = (
     );
 };
 
-export const deleteCourse = (id: number) => {
-    return axiosClient.delete(`/api/courses/${id}`);
+export const deleteCourse = (
+    id: number
+) => {
+    return axiosClient.delete(
+        `/api/courses/${id}`
+    );
+};
+
+export const getCourseById = (
+    id: number
+) => {
+    return axiosClient.get<Course>(
+        `/api/courses/${id}`
+    );
 };

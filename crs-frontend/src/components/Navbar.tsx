@@ -3,7 +3,9 @@ import {
     useNavigate,
 } from 'react-router-dom';
 
-import { useAuth } from '../context/AuthContext';
+import {
+    useAuth,
+} from '../context/AuthContext';
 
 export default function Navbar() {
     const {
@@ -12,7 +14,8 @@ export default function Navbar() {
         logout,
     } = useAuth();
 
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
     const handleLogout = () => {
         logout();
@@ -25,7 +28,8 @@ export default function Navbar() {
                 display: 'flex',
                 gap: 16,
                 padding: 12,
-                borderBottom: '1px solid #ddd',
+                borderBottom:
+                    '1px solid #ddd',
                 alignItems: 'center',
             }}
         >
@@ -42,19 +46,37 @@ export default function Navbar() {
 
             {isAuthenticated &&
                 user?.role === 'STUDENT' && (
-                    <Link to="/register-course">
-                        Dang ky hoc phan
-                    </Link>
+                    <>
+                        <Link to="/register-course">
+                            Dang ky hoc phan
+                        </Link>
+
+                        <Link to="/my-registrations">
+                            Mon hoc da dang ky
+                        </Link>
+                    </>
                 )}
 
-            <div style={{ marginLeft: 'auto' }}>
+            <div
+                style={{
+                    marginLeft: 'auto',
+                }}
+            >
                 {isAuthenticated ? (
                     <>
-            <span style={{ marginRight: 12 }}>
-              Xin chao, {user?.username} ({user?.role})
+            <span
+                style={{
+                    marginRight: 12,
+                }}
+            >
+              Xin chao,{' '}
+                {user?.username}{' '}
+                ({user?.role})
             </span>
 
-                        <button onClick={handleLogout}>
+                        <button
+                            onClick={handleLogout}
+                        >
                             Dang xuat
                         </button>
                     </>

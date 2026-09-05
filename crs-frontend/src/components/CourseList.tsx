@@ -6,8 +6,12 @@ interface CourseListProps {
     state: LoadState;
     errorMessage: string;
     onRetry: () => void;
+
     onEdit?: (course: Course) => void;
     onDelete?: (course: Course) => void;
+    onRegister?: (course: Course) => void;
+
+    registeringId?: number | null;
 }
 
 export default function CourseList({
@@ -17,6 +21,8 @@ export default function CourseList({
                                        onRetry,
                                        onEdit,
                                        onDelete,
+                                       onRegister,
+                                       registeringId,
                                    }: CourseListProps) {
     if (state === 'loading') {
         return <p>Dang tai danh sach mon hoc...</p>;
@@ -26,16 +32,25 @@ export default function CourseList({
         return (
             <div style={{ color: '#b91c1c' }}>
                 <p>{errorMessage}</p>
-                <button onClick={onRetry}>Thu lai</button>
+                <button onClick={onRetry}>
+                    Thu lai
+                </button>
             </div>
         );
     }
 
     if (state === 'empty') {
-        return <p>Khong tim thay mon hoc nao phu hop.</p>;
+        return (
+            <p>
+                Khong tim thay mon hoc nao phu hop.
+            </p>
+        );
     }
 
-    const showActions = !!onEdit || !!onDelete;
+    const showActions =
+        !!onEdit ||
+        !!onDelete ||
+        !!onRegister;
 
     return (
         <table
@@ -55,7 +70,9 @@ export default function CourseList({
                 <th>So tin chi</th>
                 <th>So cho con lai</th>
 
-                {showActions && <th>Thao tac</th>}
+                {showActions && (
+                    <th>Thao tac</th>
+                )}
             </tr>
             </thead>
 
@@ -67,9 +84,13 @@ export default function CourseList({
                         borderBottom: '1px solid #eee',
                     }}
                 >
-                    <td>{course.tenMonHoc}</td>
+                    <td>
+                        {course.tenMonHoc}
+                    </td>
 
-                    <td>{course.soTinChi}</td>
+                    <td>
+                        {course.soTinChi}
+                    </td>
 
                     <td
                         style={{
@@ -79,26 +100,55 @@ export default function CourseList({
                                     : 'inherit',
                         }}
                     >
-                        {course.soChoConLai} / {course.soChoToiDa}
+                        {course.soChoConLai}
+                        {' / '}
+                        {course.soChoToiDa}
                     </td>
 
                     {showActions && (
                         <td>
                             {onEdit && (
-                                <button onClick={() => onEdit(course)}>
+                                <button
+                                    onClick={() =>
+                                        onEdit(course)
+                                    }
+                                >
                                     Sua
                                 </button>
                             )}
 
                             {onDelete && (
                                 <button
-                                    onClick={() => onDelete(course)}
+                                    onClick={() =>
+                                        onDelete(course)
+                                    }
                                     style={{
                                         marginLeft: 8,
                                         color: '#b91c1c',
                                     }}
                                 >
                                     Xoa
+                                </button>
+                            )}
+
+                            {onRegister && (
+                                <button
+                                    onClick={() =>
+                                        onRegister(course)
+                                    }
+                                    disabled={
+                                        course.soChoConLai === 0 ||
+                                        registeringId === course.id
+                                    }
+                                    style={{
+                                        marginLeft: 8,
+                                    }}
+                                >
+                                    {registeringId === course.id
+                                        ? 'Dang dang ky...'
+                                        : course.soChoConLai === 0
+                                            ? 'Het cho'
+                                            : 'Dang ky'}
                                 </button>
                             )}
                         </td>

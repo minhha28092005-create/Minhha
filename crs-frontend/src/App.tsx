@@ -1,27 +1,44 @@
 import {
     BrowserRouter,
-    Routes,
-    Route,
     Navigate,
+    Route,
+    Routes,
 } from 'react-router-dom';
 
-import { AuthProvider } from './context/AuthContext';
+import {
+    AuthProvider,
+} from './context/AuthContext';
 
-import ProtectedRoute from './components/ProtectedRoute';
-import Navbar from './components/Navbar';
+import ProtectedRoute
+    from './components/ProtectedRoute';
 
-import LoginPage from './pages/LoginPage';
-import CoursesPage from './pages/CoursesPage';
-import AdminCoursesPage from './pages/AdminCoursesPage';
-import RegisterCoursePage from './pages/RegisterCoursePage';
+import Navbar
+    from './components/Navbar';
+
+import LoginPage
+    from './pages/LoginPage';
+
+import CoursesPage
+    from './pages/CoursesPage';
+
+import AdminCoursesPage
+    from './pages/AdminCoursesPage';
+
+import RegisterCoursePage
+    from './pages/RegisterCoursePage';
+
+import MyRegistrationsPage
+    from './pages/MyRegistrationsPage';
 
 function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
+
                 <Navbar />
 
                 <Routes>
+
                     <Route
                         path="/"
                         element={
@@ -34,18 +51,24 @@ function App() {
 
                     <Route
                         path="/login"
-                        element={<LoginPage />}
+                        element={
+                            <LoginPage />
+                        }
                     />
 
                     <Route
                         path="/courses"
-                        element={<CoursesPage />}
+                        element={
+                            <CoursesPage />
+                        }
                     />
 
                     <Route
                         path="/admin/courses"
                         element={
-                            <ProtectedRoute requiredRole="ADMIN">
+                            <ProtectedRoute
+                                requiredRole="ADMIN"
+                            >
                                 <AdminCoursesPage />
                             </ProtectedRoute>
                         }
@@ -54,12 +77,27 @@ function App() {
                     <Route
                         path="/register-course"
                         element={
-                            <ProtectedRoute requiredRole="STUDENT">
+                            <ProtectedRoute
+                                requiredRole="STUDENT"
+                            >
                                 <RegisterCoursePage />
                             </ProtectedRoute>
                         }
                     />
+
+                    <Route
+                        path="/my-registrations"
+                        element={
+                            <ProtectedRoute
+                                requiredRole="STUDENT"
+                            >
+                                <MyRegistrationsPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
                 </Routes>
+
             </AuthProvider>
         </BrowserRouter>
     );

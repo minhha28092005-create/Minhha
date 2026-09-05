@@ -1,14 +1,15 @@
 import {
     createContext,
     useContext,
-    useState,
     useEffect,
+    useState,
     type ReactNode,
 } from 'react';
 
 import type { LoginResponse } from '../types/auth';
 
 interface AuthUser {
+    id: number;
     username: string;
     role: 'ADMIN' | 'STUDENT';
 }
@@ -32,39 +33,31 @@ export function AuthProvider({
                              }: {
     children: ReactNode;
 }) {
-    const [user, setUser] =
-        useState<AuthUser | null>(null);
-
-    const [loading, setLoading] =
-        useState(true);
+    const [user, setUser] = useState<AuthUser | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const savedUser =
-            localStorage.getItem(USER_KEY);
+        try {
+            const savedUser = localStorage.getItem(USER_KEY);
+            const savedToken = localStorage.getItem(TOKEN_KEY);
 
-        const savedToken =
-            localStorage.getItem(TOKEN_KEY);
-
-        if (savedUser && savedToken) {
-            try {
+            if (savedUser && savedToken) {
                 setUser(JSON.parse(savedUser));
-            } catch {
-                localStorage.removeItem(TOKEN_KEY);
-                localStorage.removeItem(USER_KEY);
-                setUser(null);
             }
+        } catch {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+            setUser(null);
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     }, []);
 
     const login = (data: LoginResponse) => {
-        localStorage.setItem(
-            TOKEN_KEY,
-            data.token
-        );
+        localStorage.setItem(TOKEN_KEY, data.token);
 
         const authUser: AuthUser = {
+            id: data.userId,
             username: data.username,
             role: data.role,
         };
@@ -100,13 +93,13 @@ export function AuthProvider({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
-    const ctx = useContext(AuthContext);
+    const context = useContext(AuthContext);
 
-    if (!ctx) {
+    if (!context) {
         throw new Error(
             'useAuth phai duoc dung ben trong AuthProvider'
         );
     }
 
-    return ctx;
+    return context;
 }

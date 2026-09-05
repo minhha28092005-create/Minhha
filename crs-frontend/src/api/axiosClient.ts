@@ -1,45 +1,39 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: import.meta.env.VITE_API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
-// Request Interceptor
 axiosClient.interceptors.request.use((config) => {
-  const token =
-      localStorage.getItem('crs_token');
+    const token = localStorage.getItem('crs_token');
 
-  if (token) {
-    config.headers.Authorization =
-        `Bearer ${token}`;
-  }
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
 
-  return config;
+    return config;
 });
 
-// Response Interceptor
 axiosClient.interceptors.response.use(
     (response) => response,
 
     (error) => {
-      if (
-          axios.isAxiosError(error) &&
-          error.response?.status === 401
-      ) {
-        localStorage.removeItem('crs_token');
-        localStorage.removeItem('crs_user');
-
         if (
-            window.location.pathname !== '/login'
+            axios.isAxiosError(error) &&
+            error.response?.status === 401
         ) {
-          window.location.href = '/login';
-        }
-      }
+            localStorage.removeItem('crs_token');
+            localStorage.removeItem('crs_user');
 
-      return Promise.reject(error);
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+
+        return Promise.reject(error);
     }
 );
 
